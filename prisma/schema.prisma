@@ -1,0 +1,85 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Pension {
+  id                  Int      @id @default(autoincrement())
+  pension_name        String
+  pension_phone       String
+  pension_adress      String
+  pension_photo       String
+  pension_description String
+  pension_mail        String
+  Room                Room[]
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+enum RoomType {
+  SINGLE
+  DOUBLE
+  TRIPLE
+  QUAD
+}
+
+model Room {
+  id                 Int      @id @default(autoincrement())
+  room_number        Int
+  previo_number      Int
+  pension            Pension  @relation(fields: [pension_id], references: [id])
+  pension_id         Int
+  room_min_occupancy Int
+  room_max_occupancy Int
+  Tag                Tag[]
+  Room_type          RoomType @default(SINGLE)
+  Price              Price[]
+  Photo              Photo[]
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Review {
+  id           Int      @id @default(autoincrement())
+  sent_by      String
+  message      String
+  review_from  String
+  stars_rating Int
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Price {
+  id        Int      @id @default(autoincrement())
+  price     Int
+  occupancy Int
+  room      Room     @relation(fields: [room_id], references: [id])
+  room_id   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Photo {
+  id         Int      @id @default(autoincrement())
+  photo_path String
+  room       Room     @relation(fields: [room_id], references: [id])
+  room_id    Int
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Tag {
+  id        Int      @id @default(autoincrement())
+  tag_name  String
+  room      Room     @relation(fields: [room_id], references: [id])
+  room_id   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
