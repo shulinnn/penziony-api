@@ -109,6 +109,18 @@ app.get("/gallery", async (request, response) => {
   response.json(x);
 });
 
+app.get("/gallery/:roomId", async (request, response) => {
+  const { roomId } = request.params;
+
+  const photos = await prisma.photo.findMany({
+    where: {
+      id: Number(roomId),
+    },
+  });
+
+  response.json(photos);
+});
+
 app.get("/roomData/:id", async (request, response) => {
   const { id } = request.params;
 
