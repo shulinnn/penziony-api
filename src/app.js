@@ -114,7 +114,7 @@ app.get("/gallery/:roomId", async (request, response) => {
 
   const photos = await prisma.photo.findMany({
     where: {
-      id: Number(roomId),
+      room_id: Number(roomId),
     },
   });
 
